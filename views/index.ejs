@@ -9,6 +9,17 @@
       <textarea id="txt"></textarea>
     </div>
     <script type="text/javascript" src="/libs/jquery/jquery-2.0.0.min.js"></script>
+    <!-- <script type="text/javascript" src="/libs/caretposition.js"></script> -->
     <script type="text/javascript" src="/js/models/conversion.js"></script>
+    <script type="text/javascript" src="/js/libs/sentence.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        var $main = $('#main');
+        var $txt = $('#txt');
+
+        var sentence = new Sentence($txt);
+
+      });
+    </script>
   </body>
 </html>
