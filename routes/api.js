@@ -13,8 +13,8 @@ var modeFuncTbl = {
     var ret = {
       segments:[
         {
-          text: query.sentence,
-          candidates: [roman.conv(query.sentence)]
+          text: roman.conv(query.sentence),
+          candidates: []
         }
       ]
     }

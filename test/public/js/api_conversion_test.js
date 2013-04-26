@@ -26,8 +26,8 @@ QUnit.asyncTest( 'roman to hiragana', function() {
       throw(textStatus);
     },
     complete: function(jqXHR, textStatus){
-      strictEqual(resp.segments[0].text, 'aiueo', 'aiueo');
-      strictEqual(resp.segments[0].candidates[0], 'あいうえお', 'あいうえお');
+      strictEqual(resp.segments[0].text, 'あいうえお', 'あいうえお');
+      equal(typeof(resp.segments[0].candidates.length), 'number', 'candidates type');
       QUnit.start();
     }
   })

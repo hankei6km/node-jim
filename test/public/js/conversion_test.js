@@ -12,8 +12,8 @@ QUnit.asyncTest( 'roman to hiragana', function() {
   var cnv = new Conversion();
   cnv.get('roman', 'aiueo', function(err, resp){
     ok(!err, 'err');
-    strictEqual(resp.segments[0].text, 'aiueo', 'aiueo');
-    strictEqual(resp.segments[0].candidates[0], 'あいうえお', 'あいうえお');
+    strictEqual(resp.segments[0].text, 'あいうえお', 'あいうえお');
+    equal(typeof(resp.segments[0].candidates.length), 'number', 'candidates type');
     QUnit.start();
   });
 });
