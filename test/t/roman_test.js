@@ -44,4 +44,5 @@ QUnit.test('not roman', function() {
   assert.strictEqual(roman.conv('/'), '・', '/');
   assert.strictEqual(roman.conv('!"#$%&'), '！”＃＄％＆', '!"#$%&');
   assert.strictEqual(roman.conv('qwe'), 'ｑうぇ', 'qwe');
+  assert.strictEqual(roman.conv(''), '', 'blank');
 });

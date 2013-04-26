@@ -26,12 +26,7 @@ exports.conversion = function(req, res){
   var ret = {};
   var modeFunc = modeFuncTbl[req.query.mode];
   if(modeFunc){
-    var sentence = req.query.sentence;
-    if(sentence){
-      ret = modeFunc(req.query);
-    }else{
-      throw('sentence argument is required.');
-    }
+    ret = modeFunc(req.query);
   }else{
     throw('mode argument is invalid.');
   }

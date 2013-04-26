@@ -33,3 +33,30 @@ QUnit.asyncTest( 'roman to hiragana', function() {
   })
 
 });
+
+QUnit.asyncTest( 'blank', function() {
+
+  var resp;
+
+  $.ajax({
+    type: 'GET',
+    url: 'JIMService/V1/conversion',
+    data: {
+      mode: 'roman',
+      sentence: ''
+    },
+    dataType: 'json',
+    success: function(inData, textStatus, jqXHR){
+      resp = inData;
+    },
+    error: function(jqXHR, textStatus, errorThrown){
+      throw(textStatus);
+    },
+    complete: function(jqXHR, textStatus){
+      strictEqual(resp.segments[0].text, '', 'blank');
+      equal(typeof(resp.segments[0].candidates.length), 'number', 'candidates type');
+      QUnit.start();
+    }
+  })
+
+});
