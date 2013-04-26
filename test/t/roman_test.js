@@ -32,6 +32,11 @@ QUnit.test('conv', function() {
   assert.strictEqual(roman.conv('nn'), 'ん', 'nn');
 });
 
+QUnit.test('hiragana', function() {
+  assert.strictEqual(roman.conv('あいうえお'), 'あいうえお', 'あいうえお');
+  assert.strictEqual(roman.conv('あいうeo'), 'あいうえお', 'あいうえお');
+});
+
 QUnit.test('not roman', function() {
   assert.strictEqual(roman.conv('[]'), '「」', '[]');
   assert.strictEqual(roman.conv('()'), '（）', '()');
