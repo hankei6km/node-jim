@@ -5,6 +5,7 @@
 
 var express = require('express')
   , routes = require('./routes')
+  , api  = require('./routes/api')
   , http = require('http')
   , path = require('path');
 
@@ -35,6 +36,7 @@ app.configure('test', function(){
 });
 
 app.get('/', routes.index);
+app.get('/JIMService/V1/conversion', api.conversion);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
