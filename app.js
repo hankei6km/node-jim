@@ -27,6 +27,13 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+// test only
+app.configure('test', function(){
+  // ブラウザ上でのテスト用.
+  app.use(express.static(path.join(__dirname, 'test', 'public')));
+  app.use(express.errorHandler());
+});
+
 app.get('/', routes.index);
 
 http.createServer(app).listen(app.get('port'), function(){
