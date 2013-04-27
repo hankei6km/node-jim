@@ -52,9 +52,9 @@ Sentence.prototype.get = function($target){
     if(hiragana){
     var items = {};
     // ダミー
-    items[hiragana] = { name:hiragana};
-    items["漢字"] = { name:"漢字"};
-    items["変換"] = { name:"変換"};
+    items[hiragana] = { name:_.escape(hiragana)};
+    items["漢<br>字"] = { name:_.escape("漢<br>字")};
+    items["変換"] = { name:_.escape("変換")};
     $.contextMenu({
       selector: '#main',  // キャレット位置取得との関係で、#main を使う.
       trigger: 'none',
