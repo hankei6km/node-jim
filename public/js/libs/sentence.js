@@ -39,8 +39,12 @@ var Sentence = function($textArea, contextMenuSelector){
       }
     }else if(event.keyCode == 27){
       if(that.isPreEdit()){
-        that.insFld($target, '', that.insPos, that.insPos + that.preLen);
-        that.initProp();
+        if(that.focusedContextMenuItem){
+          that.get($target);
+        }else{
+          that.insFld($target, '', that.insPos, that.insPos + that.preLen);
+          that.initProp();
+        }
         event.preventDefault();
       }
     }else if(event.keyCode == 13){
