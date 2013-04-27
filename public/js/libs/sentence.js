@@ -44,33 +44,41 @@ Sentence.prototype.initProp = function(){
 Sentence.prototype.get = function($target){
   var that = this;
   this.conv.get('roman', this.inputText, function(err, resp){
-    var hiragana = resp.segments[0].text
-    that.insFld($target, hiragana, that.insPos, that.insPos + that.preLen);
-    that.preLen = hiragana.length;
+    if(!err){
+      var hiragana = resp.segments[0].text
+      that.insFld($target, hiragana, that.insPos, that.insPos + that.preLen);
+      that.preLen = hiragana.length;
 
-    // エラーになるがとりあえず動くのでそのまま.
-    $.contextMenu( 'destroy',  that.contextMenuSelector);
+      // エラーになるがとりあえず動くのでそのまま.
+      $.contextMenu( 'destroy',  that.contextMenuSelector);
 
-    if(hiragana){
-    var items = {};
-    // ダミー
-    items[hiragana] = { name:_.escape(hiragana)};
-    items["漢<br>字"] = { name:_.escape("漢<br>字")};
-    items["変換"] = { name:_.escape("変換")};
-    $.contextMenu({
-      selector: that.contextMenuSelector,
-      trigger: 'none',
-      callback: function(key, options) {
-        that.insFld($target, key, that.insPos,  that.insPos + that.preLen);
-      },
-      items: items
-    });
+      if(hiragana){
+        var candidates = resp.segments[0].candidates;
+        var len = candidates.length; 
+        if(len > 0){
+          // 推測変換候補をitemsにする.
+          var items = {};
+          for(var idx=0; idx<len; idx++){
+            var word = candidates[idx].word;
+            items[word] = {name: _.escape(word)};
+          }
 
-    var cp = Measurement.caretPos($target);
-    $(that.contextMenuSelector).contextMenu({
-      x: cp.left,
-      y: cp.top + 18
-    });
+          $.contextMenu({
+            selector: that.contextMenuSelector,
+            trigger: 'none',
+            callback: function(key, options) {
+              that.insFld($target, key, that.insPos,  that.insPos + that.preLen);
+            },
+            items: items
+          });
+
+          var cp = Measurement.caretPos($target);
+          $(that.contextMenuSelector).contextMenu({
+            x: cp.left,
+            y: cp.top + 18
+          });
+        }
+      }
     }
 
   });
