@@ -9,8 +9,8 @@
 var roman = require('../lib/roman')
 
 var modeFuncTbl = {
-  roman: function(query){
-    var ret = {
+  roman: function(query, cb){
+    var resp = {
       segments:[
         {
           text: roman.conv(query.sentence),
@@ -18,18 +18,17 @@ var modeFuncTbl = {
         }
       ]
     }
-    return ret;
+    cb(null, resp);
   }
 };
 
 exports.conversion = function(req, res){
-  var ret = {};
   var modeFunc = modeFuncTbl[req.query.mode];
   if(modeFunc){
-    ret = modeFunc(req.query);
+    modeFunc(req.query, function(err, resp){
+      res.json(resp);
+    });
   }else{
     throw('mode argument is invalid.');
   }
-  res.json(ret);
-
 };
