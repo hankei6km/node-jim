@@ -36,6 +36,7 @@ module.exports = function(in_connection_string){
       predictive.find({
         reading:r
       },'word' ,{
+        limit:30,
         sort: {
           cost: 1
         }
