@@ -15,7 +15,11 @@ module.exports = function(in_connection_string){
     cost: Number,
     reading: String,
     word: String
-  })
+  });
+  predictiveSchema.index({
+    reading: 1
+  });
+  predictiveSchema.set('autoIndex', false);
   var predictive = mongoose.model('predictive', predictiveSchema)
 
 
