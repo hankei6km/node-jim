@@ -43,7 +43,7 @@ Sentence.prototype.initProp = function(){
 
 Sentence.prototype.get = function($target){
   var that = this;
-  var hiragana = Roman2Hiragana.conv(this.inputText);
+  var hiragana = Roman2Hiragana.conv(this.inputText).text;
   that.insFld($target, hiragana, that.insPos, that.insPos + that.preLen);
   that.preLen = hiragana.length;
 
