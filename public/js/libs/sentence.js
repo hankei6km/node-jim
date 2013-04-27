@@ -14,6 +14,11 @@ var Sentence = function($textArea, contextMenuSelector){
   $(document.body).on("contextmenu:focus", ".context-menu-item", 
                       function(e){ 
                         that.focusedContextMenuItem = e.target.textContent;
+                        if(that.isPreEdit()){
+                          that.insFld(that.$target, that.focusedContextMenuItem, that.insPos,
+                                      that.insPos + that.preLen);
+                          that.preLen = that.focusedContextMenuItem.length;
+                        }
                       });
   $(document.body).on("contextmenu:blur", ".context-menu-item",
                       function(e){ 
@@ -53,8 +58,6 @@ var Sentence = function($textArea, contextMenuSelector){
     if ((32 <= event.keyCode && event.keyCode < 127)) {
       if(that.focusedContextMenuItem){
         // 選択中の候補があったので、確定する.
-        that.insFld($target, that.focusedContextMenuItem, that.insPos,
-                    that.insPos + that.preLen);
         that.initProp();
       }
       if(!that.isPreEdit()){
@@ -71,6 +74,7 @@ Sentence.prototype.initProp = function(){
   this.inputText = '';
   this.hiragana = '';
   $.contextMenu( 'destroy', this.contextMenuSelector);
+  this.$target = null;
   this.preLen = 0;
 }
 
@@ -80,6 +84,7 @@ Sentence.prototype.isPreEdit = function(){
 
 Sentence.prototype.get = function($target){
   var that = this;
+  this.$target = $target;
 
   // ローマ字へ変換.
   var conv = Roman2Hiragana.conv(this.inputText);
