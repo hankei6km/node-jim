@@ -25,7 +25,9 @@ var Sentence = function($textArea){
       }
     }else if(event.keyCode == 13){
       if(that.inputText){
-        that.initProp();
+        setTimeout(function(){
+          that.initProp();
+        },100);
         event.preventDefault();
       }
     }
@@ -34,6 +36,7 @@ var Sentence = function($textArea){
 
 Sentence.prototype.initProp = function(){
   this.inputText = '';
+  $.contextMenu( 'destroy',  '#main');
   this.preLen = 0;
 }
 
@@ -43,6 +46,31 @@ Sentence.prototype.get = function($target){
     var hiragana = resp.segments[0].text
     that.insFld($target, hiragana, that.insPos, that.insPos + that.preLen);
     that.preLen = hiragana.length;
+
+    $.contextMenu( 'destroy',  '#main'); // エラーになるがとりあえず動くのでそのまま.
+
+    if(hiragana){
+    var items = {};
+    // ダミー
+    items[hiragana] = { name:hiragana};
+    items["漢字"] = { name:"漢字"};
+    items["変換"] = { name:"変換"};
+    $.contextMenu({
+      selector: '#main',  // キャレット位置取得との関係で、#main を使う.
+      trigger: 'none',
+      callback: function(key, options) {
+        that.insFld($target, key, that.insPos,  that.insPos + that.preLen);
+      },
+      items: items
+    });
+
+    var cp = Measurement.caretPos($target);
+    $('#main').contextMenu({
+      x: cp.left,
+      y: cp.top + 18
+    });
+    }
+
   });
 };
 
