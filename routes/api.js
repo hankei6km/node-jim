@@ -7,18 +7,29 @@
 "use strict";
 
 var roman = require('../lib/roman')
+var predictive = require('../models/predictive')();
 
 var modeFuncTbl = {
   roman: function(query, cb){
-    var resp = {
-      segments:[
-        {
-          text: roman.conv(query.sentence),
-          candidates: []
+    var hiragana = roman.conv(query.sentence);
+    predictive.getCandidate(hiragana, function(err, docs){
+      if(!err){
+        var len = docs.length;
+        var candidates = new Array(len);
+        for(var idx=0; idx<len; idx++){
+          candidates[idx] = {word: docs[idx].word};
         }
-      ]
-    }
-    cb(null, resp);
+        var resp = {
+          segments:[
+            {
+            text: roman.conv(query.sentence),
+            candidates: candidates
+          }
+          ]
+        }
+      }
+      cb(err, resp);
+    }); 
   }
 };
 

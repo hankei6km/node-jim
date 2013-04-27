@@ -7,7 +7,7 @@
 "use strict"
 QUnit.module('api_conversion');
 
-QUnit.asyncTest( 'roman to hiragana', function() {
+QUnit.asyncTest( 'roman to hiragana and candidates', function() {
 
   var resp;
 
@@ -16,7 +16,7 @@ QUnit.asyncTest( 'roman to hiragana', function() {
     url: 'JIMService/V1/conversion',
     data: {
       mode: 'roman',
-      sentence: 'aiueo'
+      sentence: 'a'
     },
     dataType: 'json',
     success: function(inData, textStatus, jqXHR){
@@ -26,8 +26,11 @@ QUnit.asyncTest( 'roman to hiragana', function() {
       throw(textStatus);
     },
     complete: function(jqXHR, textStatus){
-      strictEqual(resp.segments[0].text, 'あいうえお', 'あいうえお');
+      strictEqual(resp.segments[0].text, 'あ', 'あ');
       equal(typeof(resp.segments[0].candidates.length), 'number', 'candidates type');
+      ok(resp.segments[0].candidates.length > 0,  'candidates.length');
+      equal(typeof(resp.segments[0].candidates[0].word),
+            'string', 'candidates[0].word type');
       QUnit.start();
     }
   })
