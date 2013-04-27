@@ -66,6 +66,18 @@ Sentence.prototype.get = function($target){
           $.contextMenu({
             selector: that.contextMenuSelector,
             trigger: 'none',
+            position: function(opt, x, y){
+              var $win = $(window);
+              var bottom = $win.scrollTop() + $win.height();
+              var height = opt.$menu.height()
+              if(y + height > bottom){
+                y = bottom - height 
+                if(y < 0){
+                  y = 0;
+                }
+              }
+              opt.$menu.css({top: y, left: x});
+            },
             callback: function(key, options) {
               that.insFld($target, key, that.insPos,  that.insPos + that.preLen);
             },
