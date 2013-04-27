@@ -21,22 +21,8 @@ var Sentence = function($textArea, contextMenuSelector){
                       });
 
   $textArea.keydown(function(event){
-    var chr = String.fromCharCode(event.which);
     var $target = $(event.target);
-    if (('A' <= chr && chr <= 'Z')) {
-      if(that.focusedContextMenuItem){
-        // 選択中の候補があったので、確定する.
-        that.insFld($target, that.focusedContextMenuItem, that.insPos,
-                    that.insPos + that.preLen);
-        that.initProp();
-      }
-      if(!that.isPreEdit()){
-        that.insPos = $target.prop("selectionStart");
-      }
-      that.inputText = that.inputText + chr.toLocaleLowerCase();
-      that.get($target);
-      event.preventDefault();
-    }else if(event.keyCode == 8){
+    if(event.keyCode == 8){
       if(that.isPreEdit()){
         if(that.inputText){
           that.inputText = that.inputText.substr(0, that.inputText.length-1);
@@ -53,6 +39,24 @@ var Sentence = function($textArea, contextMenuSelector){
         },100);
         event.preventDefault();
       }
+    }
+  });
+  $textArea.keypress(function(event){
+    var chr = String.fromCharCode(event.which);
+    var $target = $(event.target);
+    if ((32 <= event.keyCode && event.keyCode < 127)) {
+      if(that.focusedContextMenuItem){
+        // 選択中の候補があったので、確定する.
+        that.insFld($target, that.focusedContextMenuItem, that.insPos,
+                    that.insPos + that.preLen);
+        that.initProp();
+      }
+      if(!that.isPreEdit()){
+        that.insPos = $target.prop("selectionStart");
+      }
+      that.inputText = that.inputText + chr.toLocaleLowerCase();
+      that.get($target);
+      event.preventDefault();
     }
   });
 };
