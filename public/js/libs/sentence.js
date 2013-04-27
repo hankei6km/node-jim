@@ -1,5 +1,4 @@
 "use strict"
-
 var Sentence = function($textArea, contextMenuSelector){
   this.$textArea = $textArea;
   this.contextMenuSelector = contextMenuSelector;
@@ -8,10 +7,29 @@ var Sentence = function($textArea, contextMenuSelector){
   this.initProp();
 
   var that = this;
+
+  // 変換候補が選択されているかの判定.
+  // このクラス内で登録したメニューかの識別はおこなっていない.
+  // クラスが破棄されたあとの動作は考えていない.
+  $(document.body).on("contextmenu:focus", ".context-menu-item", 
+                      function(e){ 
+                        that.focusedContextMenuItem = e.target.textContent;
+                      });
+  $(document.body).on("contextmenu:blur", ".context-menu-item",
+                      function(e){ 
+                        that.focusedContextMenuItem = '';
+                      });
+
   $textArea.keydown(function(event){
     var chr = String.fromCharCode(event.which);
     var $target = $(event.target);
     if (('A' <= chr && chr <= 'Z')) {
+      if(that.focusedContextMenuItem){
+        // 選択中の候補があったので、確定する.
+        that.insFld($target, that.focusedContextMenuItem, that.insPos,
+                    that.insPos + that.preLen);
+        that.initProp();
+      }
       if(!that.isPreEdit()){
         that.insPos = $target.prop("selectionStart");
       }
