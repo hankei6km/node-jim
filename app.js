@@ -43,6 +43,10 @@ app.get('/libs/underscore.js', function(req, res, next){
   res.sendfile(
     path.join(__dirname, 'node_modules', 'underscore', 'underscore.js'));
 });
+app.get('/js/libs/roman.js', function(req, res, next){
+  res.sendfile(
+    path.join(__dirname, 'lib', 'roman.js'));
+});
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
