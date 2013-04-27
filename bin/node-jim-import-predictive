@@ -1,0 +1,23 @@
+#!/usr/bin/env node
+"use strict"
+
+var fs = require('fs');
+var predictive = require('../models/predictive')();
+
+if(process.argv.length == 3){
+  try{
+    var p = fs.readFileSync(process.argv[2]).toString();
+    var a = JSON.parse(p);
+    predictive.create(a,function(err){
+      if(err){
+        console.log(err);
+      }
+      predictive.disconnect();
+    });
+  }catch(e){
+    console.log(e);
+  }
+}else{
+  console.log('Usage:node-jim-import-predictive predictive-dict.json');
+  process.exit(1);
+}
