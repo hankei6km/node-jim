@@ -58,6 +58,7 @@ QUnit.asyncTest( 'blank', function() {
     complete: function(jqXHR, textStatus){
       strictEqual(resp.segments[0].text, '', 'blank');
       equal(typeof(resp.segments[0].candidates.length), 'number', 'candidates type');
+      ok(resp.segments[0].candidates.length == 0,  'candidates.length');
       QUnit.start();
     }
   })

@@ -24,7 +24,11 @@ module.exports = function(in_connection_string){
       predictive.create(arr, cb);
     },
     getCandidate: function(reading, cb){
-      var r = new RegExp('^'+ reading, 'i');
+      if(reading){
+        var r = new RegExp('^'+ reading, 'i');
+      }else{
+        var r = '';
+      }
       predictive.find({
         reading:r
       },'word' ,{
