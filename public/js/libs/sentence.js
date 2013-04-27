@@ -1,7 +1,8 @@
 "use strict"
 
-var Sentence = function($textArea){
+var Sentence = function($textArea, contextMenuSelector){
   this.$textArea = $textArea;
+  this.contextMenuSelector = contextMenuSelector;
   this.conv = new Conversion();
   
   this.initProp();
@@ -36,7 +37,7 @@ var Sentence = function($textArea){
 
 Sentence.prototype.initProp = function(){
   this.inputText = '';
-  $.contextMenu( 'destroy',  '#main');
+  $.contextMenu( 'destroy', this.contextMenuSelector);
   this.preLen = 0;
 }
 
@@ -47,7 +48,8 @@ Sentence.prototype.get = function($target){
     that.insFld($target, hiragana, that.insPos, that.insPos + that.preLen);
     that.preLen = hiragana.length;
 
-    $.contextMenu( 'destroy',  '#main'); // エラーになるがとりあえず動くのでそのまま.
+    // エラーになるがとりあえず動くのでそのまま.
+    $.contextMenu( 'destroy',  that.contextMenuSelector);
 
     if(hiragana){
     var items = {};
@@ -56,7 +58,7 @@ Sentence.prototype.get = function($target){
     items["漢<br>字"] = { name:_.escape("漢<br>字")};
     items["変換"] = { name:_.escape("変換")};
     $.contextMenu({
-      selector: '#main',  // キャレット位置取得との関係で、#main を使う.
+      selector: that.contextMenuSelector,
       trigger: 'none',
       callback: function(key, options) {
         that.insFld($target, key, that.insPos,  that.insPos + that.preLen);
@@ -65,7 +67,7 @@ Sentence.prototype.get = function($target){
     });
 
     var cp = Measurement.caretPos($target);
-    $('#main').contextMenu({
+    $(that.contextMenuSelector).contextMenu({
       x: cp.left,
       y: cp.top + 18
     });
