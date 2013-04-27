@@ -32,6 +32,12 @@ var Sentence = function($textArea, contextMenuSelector){
         that.get($target);
         event.preventDefault();
       }
+    }else if(event.keyCode == 27){
+      if(that.isPreEdit()){
+        that.insFld($target, '', that.insPos, that.insPos + that.preLen);
+        that.initProp();
+        event.preventDefault();
+      }
     }else if(event.keyCode == 13){
       if(that.isPreEdit()){
         setTimeout(function(){
