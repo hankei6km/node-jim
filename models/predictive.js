@@ -5,6 +5,7 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback () {
 });
 
+var reading_params = require('../lib/reading-params');
 
 module.exports = function(in_connection_string){
   var connection_string = 
@@ -29,7 +30,8 @@ module.exports = function(in_connection_string){
     },
     getCandidate: function(reading, cb){
       if(reading){
-        var r = new RegExp('^'+ reading, 'i');
+        var p = reading_params(reading);
+        var r = p.readingRegExp;
       }else{
         var r = '';
       }
