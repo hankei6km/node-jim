@@ -43,12 +43,12 @@ Sentence.prototype.initProp = function(){
 
 Sentence.prototype.get = function($target){
   var that = this;
-  this.conv.get('roman', this.inputText, function(err, resp){
-    if(!err){
-      var hiragana = resp.segments[0].text
-      that.insFld($target, hiragana, that.insPos, that.insPos + that.preLen);
-      that.preLen = hiragana.length;
+  var hiragana = Roman2Hiragana.conv(this.inputText);
+  that.insFld($target, hiragana, that.insPos, that.insPos + that.preLen);
+  that.preLen = hiragana.length;
 
+  this.conv.get('predictive', hiragana, function(err, resp){
+    if(!err){
       // エラーになるがとりあえず動くのでそのまま.
       $.contextMenu( 'destroy',  that.contextMenuSelector);
 
