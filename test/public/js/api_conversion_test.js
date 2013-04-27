@@ -15,8 +15,8 @@ QUnit.asyncTest( 'roman to hiragana and candidates', function() {
     type: 'GET',
     url: 'JIMService/V1/conversion',
     data: {
-      mode: 'roman',
-      sentence: 'a'
+      mode: 'predictive',
+      sentence: 'あ'
     },
     dataType: 'json',
     success: function(inData, textStatus, jqXHR){
@@ -45,7 +45,7 @@ QUnit.asyncTest( 'blank', function() {
     type: 'GET',
     url: 'JIMService/V1/conversion',
     data: {
-      mode: 'roman',
+      mode: 'predictive',
       sentence: ''
     },
     dataType: 'json',

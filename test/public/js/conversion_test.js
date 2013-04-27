@@ -10,7 +10,7 @@ QUnit.module('conversion');
 QUnit.asyncTest( 'roman to hiragana', function() {
 
   var cnv = new Conversion();
-  cnv.get('roman', 'aiueo', function(err, resp){
+  cnv.get('predictive', 'あいうえお', function(err, resp){
     ok(!err, 'err');
     strictEqual(resp.segments[0].text, 'あいうえお', 'あいうえお');
     equal(typeof(resp.segments[0].candidates.length), 'number', 'candidates type');

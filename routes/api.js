@@ -6,13 +6,11 @@
  */
 "use strict";
 
-var roman = require('../lib/roman')
 var predictive = require('../models/predictive')();
 
 var modeFuncTbl = {
-  roman: function(query, cb){
-    var hiragana = roman.conv(query.sentence);
-    predictive.getCandidate(hiragana, function(err, docs){
+  predictive: function(query, cb){
+    predictive.getCandidate(query.sentence, function(err, docs){
       if(!err){
         var len = docs.length;
         var candidates = new Array(len);
@@ -22,7 +20,7 @@ var modeFuncTbl = {
         var resp = {
           segments:[
             {
-            text: roman.conv(query.sentence),
+            text: query.sentence,
             candidates: candidates
           }
           ]
