@@ -12,20 +12,24 @@ var Sentence = function($textArea, contextMenuSelector){
     var chr = String.fromCharCode(event.which);
     var $target = $(event.target);
     if (('A' <= chr && chr <= 'Z')) {
-      if(that.inputText === ''){
+      if(!that.isPreEdit()){
         that.insPos = $target.prop("selectionStart");
       }
       that.inputText = that.inputText + chr.toLocaleLowerCase();
       that.get($target);
       event.preventDefault();
     }else if(event.keyCode == 8){
-      if(that.inputText){
-        that.inputText = that.inputText.substr(0, that.inputText.length-1);
+      if(that.isPreEdit()){
+        if(that.inputText){
+          that.inputText = that.inputText.substr(0, that.inputText.length-1);
+        }else{
+          that.hiragana = that.hiragana.substr(0, that.hiragana.length-1);
+        }
         that.get($target);
         event.preventDefault();
       }
     }else if(event.keyCode == 13){
-      if(that.inputText){
+      if(that.isPreEdit()){
         setTimeout(function(){
           that.initProp();
         },100);
@@ -37,22 +41,37 @@ var Sentence = function($textArea, contextMenuSelector){
 
 Sentence.prototype.initProp = function(){
   this.inputText = '';
+  this.hiragana = '';
   $.contextMenu( 'destroy', this.contextMenuSelector);
   this.preLen = 0;
 }
 
+Sentence.prototype.isPreEdit = function(){
+  return !(this.inputText === '' && this.hiragana === '');
+};
+
 Sentence.prototype.get = function($target){
   var that = this;
-  var hiragana = Roman2Hiragana.conv(this.inputText).text;
-  that.insFld($target, hiragana, that.insPos, that.insPos + that.preLen);
-  that.preLen = hiragana.length;
 
-  this.conv.get('predictive', hiragana, function(err, resp){
+  // ローマ字へ変換.
+  var conv = Roman2Hiragana.conv(this.inputText);
+  if(conv.complete){
+    // ローマ字へ変換が完了(ひらがな確定とほぼ同義)
+    this.hiragana = this.hiragana + conv.text;
+    conv.text = '';
+    // 入力中のテキストはクリア.
+    this.inputText = '';
+  }
+  var sentence = this.hiragana + conv.text;
+  this.insFld($target, sentence, this.insPos, this.insPos + this.preLen);
+  this.preLen = sentence.length;
+
+  this.conv.get('predictive', sentence, function(err, resp){
     if(!err){
       // エラーになるがとりあえず動くのでそのまま.
       $.contextMenu( 'destroy',  that.contextMenuSelector);
 
-      if(hiragana){
+      if(sentence){
         var candidates = resp.segments[0].candidates;
         var len = candidates.length; 
         if(len > 0){
