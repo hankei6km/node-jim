@@ -38,6 +38,12 @@ app.configure('test', function(){
 app.get('/', routes.index);
 app.get('/JIMService/V1/conversion', api.conversion);
 
+// ブラウザへライブラリを公開.
+app.get('/libs/underscore.js', function(req, res, next){
+  res.sendfile(
+    path.join(__dirname, 'node_modules', 'underscore', 'underscore.js'));
+});
+
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
