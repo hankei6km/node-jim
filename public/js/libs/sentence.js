@@ -3,6 +3,7 @@ var Sentence = function($textArea, contextMenuSelector){
   this.$textArea = $textArea;
   this.contextMenuSelector = contextMenuSelector;
   this.conv = new Conversion();
+  this.status = true;
   
   this.initProp();
 
@@ -54,24 +55,33 @@ var Sentence = function($textArea, contextMenuSelector){
         },100);
         event.preventDefault();
       }
-    }
-  });
-  $textArea.keypress(function(event){
-    var chr = String.fromCharCode(event.which);
-    var $target = $(event.target);
-    if ((32 <= event.keyCode && event.keyCode < 127)) {
-      if(that.focusedContextMenuItem){
-        // 選択中の候補があったので、確定する.
-        that.initProp();
-      }
+    }else if(event.ctrlKey && event.keyCode == 74){
       if(!that.isPreEdit()){
-        that.insPos = $target.prop("selectionStart");
+        that.status = !that.status;
       }
-      that.inputText = that.inputText + chr.toLocaleLowerCase();
-      that.get($target);
       event.preventDefault();
     }
   });
+  $textArea.keypress(function(event){
+    if(that.status){
+      var chr = String.fromCharCode(event.which);
+      var $target = $(event.target);
+      if ((32 <= event.keyCode && event.keyCode < 127)) {
+        if(that.focusedContextMenuItem){
+          // 選択中の候補があったので、確定する.
+          that.initProp();
+        }
+        if(!that.isPreEdit()){
+          that.insPos = $target.prop("selectionStart");
+        }
+        that.inputText = that.inputText + chr.toLocaleLowerCase();
+        that.get($target);
+        event.preventDefault();
+      }
+    }
+  });
+  $textArea.keyup(function(event){
+  })
 };
 
 Sentence.prototype.initProp = function(){
