@@ -7,7 +7,65 @@
 "use strict"
 QUnit.module('api_conversion');
 
-QUnit.asyncTest( 'roman to hiragana and candidates', function() {
+QUnit.asyncTest( 'roman to hiragana wtth complete', function() {
+
+  var resp;
+
+  $.ajax({
+    type: 'GET',
+    url: 'JIMService/V1/conversion',
+    data: {
+      mode: 'roman',
+      sentence: 'aiueo'
+    },
+    dataType: 'json',
+    success: function(inData, textStatus, jqXHR){
+      resp = inData;
+    },
+    error: function(jqXHR, textStatus, errorThrown){
+      throw(textStatus);
+    },
+    complete: function(jqXHR, textStatus){
+      strictEqual(resp.segments[0].text, 'あいうえお', 'aiueo');
+      equal(typeof(resp.segments[0].candidates.length), 'number', 'candidates type');
+      ok(resp.segments[0].candidates.length == 0,  'candidates.length');
+      equal(resp.segments[0].complete, true, 'complete flag');
+      QUnit.start();
+    }
+  })
+
+});
+
+QUnit.asyncTest( 'roman to hiragana wtth uncomplete', function() {
+
+  var resp;
+
+  $.ajax({
+    type: 'GET',
+    url: 'JIMService/V1/conversion',
+    data: {
+      mode: 'roman',
+      sentence: 'kakk'
+    },
+    dataType: 'json',
+    success: function(inData, textStatus, jqXHR){
+      resp = inData;
+    },
+    error: function(jqXHR, textStatus, errorThrown){
+      throw(textStatus);
+    },
+    complete: function(jqXHR, textStatus){
+      strictEqual(resp.segments[0].text, 'かっｋ', 'kakk');
+      equal(typeof(resp.segments[0].candidates.length), 'number', 'candidates type');
+      ok(resp.segments[0].candidates.length == 0,  'candidates.length');
+      equal(resp.segments[0].complete, false, 'complete flag');
+      QUnit.start();
+    }
+  })
+
+});
+
+QUnit.asyncTest( 'roman to candidates', function() {
 
   var resp;
 

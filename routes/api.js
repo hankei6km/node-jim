@@ -6,9 +6,21 @@
  */
 "use strict";
 
+var roman = require('../lib/roman');
 var predictive = require('../models/predictive')();
 
 var modeFuncTbl = {
+  roman: function(query, cb){
+    var r = roman.conv(query.sentence);
+    var resp = {
+      segments:[{
+        text: r.text,
+        candidates: [],
+        complete: r.complete
+      }]
+    }
+    cb(null, resp);
+  },
   predictive: function(query, cb){
     predictive.getCandidate(query.sentence, function(err, docs){
       if(!err){
