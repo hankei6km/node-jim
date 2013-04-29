@@ -149,6 +149,7 @@ Sentence.prototype.get = function($target){
                 if(y < 0){
                   y = 0;
                 }
+                x = x + 8; // ここの値は本来ならフォントサイズから求めるべきだが
               }
               opt.$menu.css({top: y, left: x});
             },
@@ -161,7 +162,7 @@ Sentence.prototype.get = function($target){
           var cp = Measurement.caretPos($target);
           $(that.contextMenuSelector).contextMenu({
             x: cp.left,
-            y: cp.top + 18
+            y: cp.top + 18  // ここの値は本来ならフォントサイズから求めるべきだが
           });
         }
       }
