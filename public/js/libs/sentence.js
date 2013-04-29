@@ -56,7 +56,13 @@ var Sentence = function($textArea, contextMenuSelector){
         event.preventDefault();
       }
     }else if(event.ctrlKey && event.keyCode == 74){
-      if(!that.isPreEdit()){
+      if(that.isPreEdit()){
+        var katakana = Roman2Hiragana.katakana(that.hiragana + that.inputText).text;
+        that.insFld(that.$target, katakana, that.insPos,
+                    that.insPos + that.preLen);
+        that.preLen = katakana.length;
+        that.katakana = true;
+      }else{
         that.status = !that.status;
       }
       event.preventDefault();
@@ -67,7 +73,7 @@ var Sentence = function($textArea, contextMenuSelector){
       var chr = String.fromCharCode(event.which);
       var $target = $(event.target);
       if ((32 <= event.keyCode && event.keyCode < 127)) {
-        if(that.focusedContextMenuItem){
+        if(that.focusedContextMenuItem || that.katakana){
           // 選択中の候補があったので、確定する.
           that.initProp();
         }
@@ -89,6 +95,7 @@ Sentence.prototype.initProp = function(){
   this.hiragana = '';
   $.contextMenu( 'destroy', this.contextMenuSelector);
   this.$target = null;
+  this.katakana = false;
   this.preLen = 0;
 }
 
