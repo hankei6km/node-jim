@@ -72,7 +72,8 @@ var Sentence = function($textArea, contextMenuSelector){
     if(that.status){
       var chr = String.fromCharCode(event.which);
       var $target = $(event.target);
-      if ((32 <= event.keyCode && event.keyCode < 127)) {
+      var code = event.keyCode != 0 ? event.keyCode: event.charCode;
+      if ((32 <= code && code < 127)) {
         if(that.focusedContextMenuItem || that.katakana){
           // 選択中の候補があったので、確定する.
           that.initProp();
