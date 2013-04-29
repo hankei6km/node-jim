@@ -31,6 +31,15 @@ QUnit.test('hiragana', function() {
   strictEqual(roman.conv('あいうeo').text, 'あいうえお', 'あいうえお');
 });
 
+QUnit.test('katakana', function() {
+  strictEqual(roman.katakana('あいうえお').text, 'アイウエオ', 'あういえお');
+  strictEqual(roman.katakana('ぎょうざ').text, 'ギョウザ', 'ぎょうざ');
+  strictEqual(roman.katakana('かれー').text, 'カレー', 'かれー');
+  strictEqual(roman.katakana('かれーそば').text, 'カレーソバ', 'かれーそば');
+  strictEqual(roman.katakana('らっきょう').text, 'ラッキョウ', 'らっきょう');
+  strictEqual(roman.katakana('あんぱん').text, 'アンパン', 'あんぱん');
+});
+
 QUnit.test('not roman', function() {
   strictEqual(roman.conv('[]').text, '「」', '[]');
   strictEqual(roman.conv('()').text, '（）', '()');
@@ -46,4 +55,8 @@ QUnit.test('complete flag', function() {
   strictEqual(roman.conv('kak').complete, false, 'kak');
   strictEqual(roman.conv('[]').complete, true, '[]');
   strictEqual(roman.conv('!').complete, false, '!');
+  strictEqual(roman.katakana('かたかな').complete, true, 'かたかな');
+  strictEqual(roman.katakana('カタカナ').complete, false, 'カタカナ');
+  strictEqual(roman.katakana('かたかn').complete, false, 'かたかn');
+  strictEqual(roman.katakana('かたかｎ').complete, false, 'かたかn');
 });

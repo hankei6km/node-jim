@@ -36,6 +36,15 @@ QUnit.test('hiragana', function() {
   assert.strictEqual(roman.conv('あいうeo').text, 'あいうえお', 'あいうえお');
 });
 
+QUnit.test('katakana', function() {
+  assert.strictEqual(roman.katakana('あいうえお').text, 'アイウエオ', 'あういえお');
+  assert.strictEqual(roman.katakana('ぎょうざ').text, 'ギョウザ', 'ぎょうざ');
+  assert.strictEqual(roman.katakana('かれー').text, 'カレー', 'かれー');
+  assert.strictEqual(roman.katakana('かれーそば').text, 'カレーソバ', 'かれーそば');
+  assert.strictEqual(roman.katakana('らっきょう').text, 'ラッキョウ', 'らっきょう');
+  assert.strictEqual(roman.katakana('あんぱん').text, 'アンパン', 'あんぱん');
+});
+
 QUnit.test('not roman', function() {
   assert.strictEqual(roman.conv('[]').text, '「」', '[]');
   assert.strictEqual(roman.conv('()').text, '（）', '()');
@@ -51,5 +60,9 @@ QUnit.test('complete flag', function() {
   assert.strictEqual(roman.conv('kak').complete, false, 'kak');
   assert.strictEqual(roman.conv('[]').complete, true, '[]');
   assert.strictEqual(roman.conv('!').complete, false, '!');
+  assert.strictEqual(roman.katakana('かたかな').complete, true, 'かたかな');
+  assert.strictEqual(roman.katakana('カタカナ').complete, false, 'カタカナ');
+  assert.strictEqual(roman.katakana('かたかn').complete, false, 'かたかn');
+  assert.strictEqual(roman.katakana('かたかｎ').complete, false, 'かたかn');
 });
 
