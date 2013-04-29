@@ -30,12 +30,10 @@ var modeFuncTbl = {
           candidates[idx] = {word: docs[idx].word};
         }
         var resp = {
-          segments:[
-            {
+          segments:[{
             text: query.sentence,
             candidates: candidates
-          }
-          ]
+          }]
         }
       }
       cb(err, resp);
