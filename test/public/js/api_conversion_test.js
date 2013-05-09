@@ -191,3 +191,34 @@ QUnit.asyncTest( 'normal', function() {
   })
 
 });
+
+QUnit.asyncTest( 'sentence length over', function() {
+
+  var resp = null;
+  var err = null;
+  var sentence = 'あいうえおあいうえあいうえおあいうえあいうえおあいうえあいうえおあいうえあいうえおあいうえあいうえおあいうえあいうえおあいうえおおおおおおおあいうえおあいうえお。';
+
+  $.ajax({
+    type: 'GET',
+    url: 'JIMService/V1/conversion',
+    data: {
+      mode: 'normal',
+      sentence: sentence
+    },
+    dataType: 'json',
+    success: function(inData, textStatus, jqXHR){
+      resp = inData;
+    },
+    error: function(jqXHR, textStatus, errorThrown){
+      err = textStatus;
+    },
+    complete: function(jqXHR, textStatus){
+      equal(resp, null ,  'resp');
+      // TODO: エラーの判定をもうちょっとまともにする.
+      ok(err, 'err');
+      
+      QUnit.start();
+    }
+  })
+
+});

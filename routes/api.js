@@ -102,12 +102,17 @@ var modeFuncTbl = {
 };
 
 exports.conversion = function(req, res){
-  var modeFunc = modeFuncTbl[req.query.mode];
-  if(modeFunc){
-    modeFunc(req.query, function(err, resp){
-      res.json(resp);
-    });
+  if(req.query.sentence.length <= 80){
+    var modeFunc = modeFuncTbl[req.query.mode];
+    if(modeFunc){
+      modeFunc(req.query, function(err, resp){
+        res.json(resp);
+      });
+    }else{
+      throw('mode argument is invalid.');
+    }
   }else{
-    throw('mode argument is invalid.');
+    // TODO: 上のも含めてエラーの処理をもうちょっとまともに.
+    throw('sentence length is over.');
   }
 };
