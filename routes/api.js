@@ -7,7 +7,10 @@
 "use strict";
 
 var roman = require('../lib/roman');
+var libkkc = require('../lib/node-libkkc');
 var predictive = require('../models/predictive')();
+
+var max_nbest = 30;
 
 var modeFuncTbl = {
   roman: function(query, cb){
@@ -38,6 +41,11 @@ var modeFuncTbl = {
       }
       cb(err, resp);
     }); 
+  },
+  decode: function(query, cb){
+    libkkc.decode(query.sentence, max_nbest, [], function(err, segments){
+      cb(err, {segments: segments});
+    });
   }
 };
 

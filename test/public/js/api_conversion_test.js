@@ -122,3 +122,33 @@ QUnit.asyncTest( 'blank', function() {
   })
 
 });
+
+QUnit.asyncTest( 'libkkc', function() {
+
+  var resp;
+
+  $.ajax({
+    type: 'GET',
+    url: 'JIMService/V1/conversion',
+    data: {
+      mode: 'decode',
+      sentence: 'へんかんのてすと'
+    },
+    dataType: 'json',
+    success: function(inData, textStatus, jqXHR){
+      resp = inData;
+    },
+    error: function(jqXHR, textStatus, errorThrown){
+      throw(textStatus);
+    },
+    complete: function(jqXHR, textStatus){
+      equal(typeof(resp.segments.length), 'number', 'segments.length');
+      equal(resp.segments.length, 30, 'segments.length');
+      // 以下は、変換結果が常に一定であるという前提になっているので注意.
+      equal(resp.segments[0][0].input, 'へんかん', 'segment[0][0].input');
+      equal(resp.segments[0][0].output, '変換', 'segment[0][0].input');
+      QUnit.start();
+    }
+  })
+
+});
