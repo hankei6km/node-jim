@@ -152,3 +152,42 @@ QUnit.asyncTest( 'libkkc', function() {
   })
 
 });
+
+QUnit.asyncTest( 'normal', function() {
+
+  var resp;
+
+  $.ajax({
+    type: 'GET',
+    url: 'JIMService/V1/conversion',
+    data: {
+      mode: 'normal',
+      sentence: 'へんかんのてすと'
+    },
+    dataType: 'json',
+    success: function(inData, textStatus, jqXHR){
+      resp = inData;
+    },
+    error: function(jqXHR, textStatus, errorThrown){
+      throw(textStatus);
+    },
+    complete: function(jqXHR, textStatus){
+      equal(resp.segments.length ,3 ,  'segments.length');
+      
+      equal(resp.segments[0].text, 'へんかん', 'segments[0].text');
+      equal(resp.segments[1].text, 'の', 'segments[0].text');
+      equal(resp.segments[2].text, 'てすと', 'segments[0].text');
+
+      equal(resp.segments[0].candidates.length, 2, 'segments[0].candidates.length');
+      equal(resp.segments[1].candidates.length, 3, 'segments[0].candidates.length');
+      equal(resp.segments[2].candidates.length, 1, 'segments[0].candidates.length');
+
+      equal(resp.segments[0].candidates[0], '変換', 'segments[0].candidates[0]');
+      equal(resp.segments[1].candidates[0], 'の', 'segments[0].candidates[1]');
+      equal(resp.segments[2].candidates[0], 'テスト', 'segments[0].candidates[2]');
+      
+      QUnit.start();
+    }
+  })
+
+});

@@ -42,6 +42,58 @@ var modeFuncTbl = {
       cb(err, resp);
     }); 
   },
+  normal: function(query, cb){
+    libkkc.decode(query.sentence, max_nbest, [], function(err, in_segments){
+      // 最初のsegmentから文節の区切りの基準を決定し、
+      // その区切りにそったものだけを対象としてレスポンスを組み立てる.
+      if(!err){
+        var segment = in_segments[0];
+        var p_len = segment.length;
+        var s = new Array(p_len);
+        for(var pos=0; pos<p_len; pos++){
+          s[pos] = segment[pos].output.length;
+        }
+        var s_len = s.length;
+
+        var segments = new Array(0);
+        var i_len = in_segments.length;
+        for(var idx=0; idx<i_len; idx++){
+          var segment = in_segments[idx];
+          var p_len = segment.length;
+          if(s_len == p_len){
+            var um = false;
+            for(var pos=0; pos<p_len; pos++){
+              if(segment[pos].output.length != s[pos]){
+                um = true;
+                break;
+              }
+            }
+            if(!um){
+              segments.push(segment);
+            }
+          }
+        }
+      }
+
+      var segment_list = new Array(s_len);
+      var i_len = segments.length;
+      var p_len = s_len;
+      for(var pos=0; pos<p_len; pos++){
+        segment_list[pos] = {
+          text: segments[0][pos].input,
+          candidates: new Array(0)
+        }
+        for(var idx=0; idx<i_len; idx++){
+          var i = segment_list[pos].candidates.indexOf(segments[idx][pos].output);
+          if(i < 0){
+            segment_list[pos].candidates.push(segments[idx][pos].output);
+          }
+        }
+      }
+
+      cb(err, {segments: segment_list});
+    });
+  },
   decode: function(query, cb){
     libkkc.decode(query.sentence, max_nbest, [], function(err, segments){
       cb(err, {segments: segments});
