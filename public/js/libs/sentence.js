@@ -133,7 +133,7 @@ Sentence.prototype.get = function($target){
           // 推測変換候補をitemsにする.
           var items = {};
           for(var idx=0; idx<len; idx++){
-            var word = candidates[idx].word;
+            var word = candidates[idx];
             items[word] = {name: _.escape(word)};
           }
 

@@ -87,8 +87,8 @@ QUnit.asyncTest( 'roman to candidates', function() {
       strictEqual(resp.segments[0].text, 'あ', 'あ');
       equal(typeof(resp.segments[0].candidates.length), 'number', 'candidates type');
       ok(resp.segments[0].candidates.length > 0,  'candidates.length');
-      equal(typeof(resp.segments[0].candidates[0].word),
-            'string', 'candidates[0].word type');
+      equal(typeof(resp.segments[0].candidates[0]),
+            'string', 'candidates[0] type');
       QUnit.start();
     }
   })

@@ -30,7 +30,7 @@ var modeFuncTbl = {
         var len = docs.length;
         var candidates = new Array(len);
         for(var idx=0; idx<len; idx++){
-          candidates[idx] = {word: docs[idx].word};
+          candidates[idx] = docs[idx].word;
         }
         var resp = {
           segments:[{
