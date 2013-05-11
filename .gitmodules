@@ -1,0 +1,3 @@
+[submodule "lib/node-zinnia"]
+	path = lib/node-zinnia
+	url = https://github.com/hankei6km/node-zinnia.git
