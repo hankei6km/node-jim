@@ -35,7 +35,11 @@ app.configure('test', function(){
   app.use(express.errorHandler());
 });
 
+// Demo
 app.get('/', routes.index);
+app.get('/demo_keyboard', routes.demo_keyboard);
+
+// API
 app.get('/JIMService/V1/conversion', api.conversion);
 
 // ブラウザへライブラリを公開.
