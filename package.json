@@ -10,7 +10,8 @@
     "ejs": "*",
     "stylus": "*",
     "underscore": "*",
-    "mongoose": "*"
+    "mongoose": "*",
+    "socket.io": "*"
   },
   "devDependencies": {
     "qunitjs": "1.10.0",
