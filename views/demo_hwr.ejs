@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body id="hwr">
+    <div id="app">
+      <div class="messagesOuter"></div>
+      <div class="txt">
+        <div>Text:</div>
+        <textarea id="txt"></textarea>
+      </div>
+      <div id="input">
+        <div class="pad">
+          <div>Pad:</div>
+          <canvas id="pad" width="400" height="400"></canvas>
+        </div>
+        <div class="results">
+          <div>Result:</div>
+          <div>
+            <% for(var idx=0; idx<10; idx++){ %>
+              <div id="<%= idx %>" class="result"></div>
+            <% } %>
+          </div>
+          <div id="clear">Clear</div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript" src="/libs/jquery/jquery-2.0.0.min.js"></script>
+    <script type="text/javascript" src="/libs/underscore.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="/js/libs/messages.js"></script>
+    <script type="text/javascript" src="/js/libs/sentence.js"></script>
+    <script type="text/javascript" src="/js/libs/pad.js"></script>
+    <script type="text/javascript" src="/js/libs/hwr-results.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        var socket = io.connect();
+        var $txt = $('#txt');
+        var $canvas = $('#pad');
+        var $resutls = $('.result');
+        var $clear = $('#clear');
+        var pad = new Pad($canvas, socket);
+        var results = new HwrResults($resutls, $clear, socket);
+        var messages = Messages($('.messagesOuter'));
+        socket.on('error', function(data){
+          messages.show(data.message);
+        });
+        $resutls.on('click', function(event){
+          var ch = $(this).text()
+          if(ch){
+            Sentence.prototype.insFld($txt, ch);
+            pad.clear();
+            results.clear();
+          }
+        });
+        $clear.on('click', function(data){
+          pad.clear();
+          results.clear();
+        });
+      });
+    </script>
+  </body>
+</html>
+
+

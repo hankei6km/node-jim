@@ -7,7 +7,8 @@ var express = require('express')
   , routes = require('./routes')
   , api  = require('./routes/api')
   , http = require('http')
-  , path = require('path');
+  , path = require('path')
+  , socket_hwr = require('./apps/socket_hwr');
 
 var app = express();
 
@@ -38,6 +39,7 @@ app.configure('test', function(){
 // Demo
 app.get('/', routes.index);
 app.get('/demo_keyboard', routes.demo_keyboard);
+app.get('/demo_hwr', routes.demo_hwr);
 
 // API
 app.get('/JIMService/V1/conversion', api.conversion);
@@ -52,6 +54,10 @@ app.get('/js/libs/roman.js', function(req, res, next){
     path.join(__dirname, 'lib', 'roman.js'));
 });
 
-http.createServer(app).listen(app.get('port'), function(){
+
+var server = http.createServer(app);
+server.listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
+
+socket_hwr(server);
