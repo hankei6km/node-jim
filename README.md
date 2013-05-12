@@ -1,7 +1,7 @@
 # node-jim
 
-Node.js + Express + MongoDB + libkkc による日本語入力を支援する Web API と、
-その API を利用した日本語入力のデモアプリのセット.
+Node.js + Express + MongoDB + libkkc +Zinnia による日本語入力支援サーバーと、
+そのデモアプリのセット.
 
 ## Requirements
 
@@ -10,6 +10,8 @@ Node.js + Express + MongoDB + libkkc による日本語入力を支援する Web
 * [libkkc](https://bitbucket.org/libkkc/libkkc/)
 * [Python](http://www.python.org)
 * [PyGObject](https://live.gnome.org/PyGObject)
+* [Zinnia](http://zinnia.sourceforge.net/)
+* [Zinnia-Tomoe](http://zinnia.sourceforge.net/)
 
 なお、libkkc について、node-jim から利用するだけならば、
 ibus-kkc はインストールしなくても動きます.
@@ -20,8 +22,13 @@ ibus-kkc はインストールしなくても動きます.
     $ wget http://hankei6km.bitbucket.org/webOS/data/predictive-dict/predictive-dict-from-naist-dict.zip
     $ unzip predictive-dict-from-naist-dict.zip predictive-dict.json
     $ cd node-jim/
+    $ git submodule init
+    $ git submodule update
     $ npm install
     $ bin/node-jim-import-predictive ../predictive-dict.json
+    $ cd lib/node-zinnia
+    $ npm install
+    $ cd ../../
 
 ## Quick Start
 
@@ -31,11 +38,16 @@ ibus-kkc はインストールしなくても動きます.
 
 ### 日本語入力のデモ
 
-ブラウザで `http://localhost:3000` を開き、テキストエリアに入力.
+ブラウザで `http://localhost:3000/demo-jim/` を開き、テキストエリアに入力.
 `Ctrl-J` で入力機能の ON / OFF.
 
 なお、テキストエリアに `ime-mode` は設定してありますが、
 環境によっては**通常の IME は自動的には無効化されない**ので注意してください.
+
+### 手書き認識のデモ
+
+ブラウザで `http://localhost:3000/demo-hwr/` を開き、
+Pad 枠に内にマウスなどで文字を書く.
 
 ## Conversion API
 
@@ -62,6 +74,24 @@ ibus-kkc はインストールしなくても動きます.
 
 なお、`mode=decode` のときはレスポンスの内容が他のモードのときと若干異なります
 (基本的には libkkc から受け取った結果をほぼそのまま JSON にしているだけ).
+
+## Handwriting Recognition
+
+手書き認識は機能、socket.io のアプリケーションとして動作しています.
+詳細は `apps/socket_hwr.js` を参照してみてください.
+いちおう以下、リクエストとレスポンスの概要など.
+
+### リクエスト
+
+* `clear` : 初期化とキャンバスサイズの通知.
+* `add` :  ストローク情報の追加と classify のリクエスト.
+
+なお、`classify` 単独でのリクエストは実装していません.
+
+### レスポンス
+
+* `result` : classify の実行結果.
+* `error` : エラーメッセージ.
 
 ## License
 
