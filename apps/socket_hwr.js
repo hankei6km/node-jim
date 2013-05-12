@@ -39,14 +39,14 @@ module.exports = function(server){
           var pt = data.pt[idx];
           s.add(data.idx, pt.x, pt.y);
         }
-        var result = r.classify(s, nbest);
-
-        var size = result.size();
-        var v = new Array(size);
-        for(var i=0; i<size; i++){
-          v[i] = {value:result.value(i),socre:result.score(i)};
-        }
-        socket.emit('result', {idx: data.idx, results:v});
+        r.classify(s, nbest,function(result){
+          var size = result.size();
+          var v = new Array(size);
+          for(var i=0; i<size; i++){
+            v[i] = {value:result.value(i),socre:result.score(i)};
+          }
+          socket.emit('result', {idx: data.idx, results:v});
+        });
         sidx++;
       }else{
         socket.emit('error', {message: 'invalid idx = ' + data.idx});
