@@ -11,8 +11,6 @@
 var socket_io = require('socket.io');
 var zinnia = require('../lib/node-zinnia');
 
-var nbest = 10;
-
 var r = zinnia.Recognizer();
 if(!r.open('/usr/lib/zinnia/model/tomoe/handwriting-ja.model')){
   console.error('can\'t load model file.');
@@ -39,7 +37,7 @@ module.exports = function(server){
           var pt = data.pt[idx];
           s.add(data.idx, pt.x, pt.y);
         }
-        r.classify(s, nbest,function(result){
+        r.classify(s, data.nbest,function(result){
           var size = result.size();
           var v = new Array(size);
           for(var i=0; i<size; i++){

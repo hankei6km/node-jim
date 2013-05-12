@@ -1,5 +1,7 @@
 "use strict"
 var Pad = function($canvas, socket){
+  this.nbest = 10;
+
   this.$canvas = $canvas;
   this.socket = socket;
   this.ctx = $canvas.get(0).getContext('2d')
@@ -54,7 +56,7 @@ Pad.prototype.storeStroke = function(x, y){
 };
 
 Pad.prototype.endStroke = function(){
-  this.socket.emit('add', {idx: this.idx, pt: this.pt});
+  this.socket.emit('add', {idx: this.idx, nbest: this.nbest, pt: this.pt});
   this.ctx.stroke();
   this.pt = null;
 };
