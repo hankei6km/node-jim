@@ -46,7 +46,7 @@ module.exports = function(server){
             var size = result.size();
             var v = new Array(size);
             for(var i=0; i<size; i++){
-              v[i] = {value:result.value(i),socre:result.score(i)};
+              v[i] = {value:result.value(i),score:result.score(i)};
             }
             socket.emit('result', {idx: data.idx, results:v});
           });
